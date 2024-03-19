@@ -1,0 +1,26 @@
+{
+  "name": "prolific",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js "
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "openai": "^4.29.1",
+    "unfluff": "^3.2.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "transform": {},
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    }
+  }
+}
