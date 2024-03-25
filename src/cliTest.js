@@ -94,12 +94,15 @@ async function extractSilasReinagelStyles() {
       writeTextToFile(`./extracted/silasreinagel/blogtext/${name}.txt`, text);
     });
 
-    const styles = await Promise.all(texts.map(text => extractStyle(text)));
-    styles.forEach((style, index) => {
-      const name = relativeUrls[index].split('/').filter(Boolean).pop(); // Extracts the name from the URL
-           writeTextToFile(`./extracted/silasreinagel/style/${name}.txt`, style);
-    });
-
+    await Promise.all(texts.map((text, idx) => {
+      const name = relativeUrls[idx].split('/').filter(Boolean).pop(); // Extracts the name from the URL
+      extractStyle(text)
+      .then(style => {
+          writeTextToFile(`./extracted/silasreinagel/style_v2/${name}.txt`, style)
+        })
+      .catch(e => console.error(`Error Extracting Style for ${name}`, e))
+    }));
+  
   } catch (error) {
     console.error('Error extracting styles:', error);
   }
