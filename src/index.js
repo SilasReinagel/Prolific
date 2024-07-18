@@ -27,6 +27,7 @@ const main = () => {
     .option('-b, --blog <blog>', 'blog topic')
     .option('-t, --topic <topic>', 'research topic')
     .option('-o, --output <output>', 'output file name')
+    .option('-a, --author <author>', 'author name')
     .option('-wfp, --writingFilePath <writingFilePath>', 'author writing style template path')
     .option('-sfp, --structureFilePath <structureFilePath>', 'article structure template path')
     .option('-h, --help', 'help')
@@ -50,17 +51,33 @@ const main = () => {
         logError(err)
       })
   } else if (options.cmd == 'firstDraft') {
+    if (!options.blog) {
+      console.log('\'blog\' is required');
+      return;
+    }
+    if (!options.author) {
+      console.log('\'author\' is required');
+      return;
+    }
     const blogTopic = options.blog
     const researchTopic = options.topic ?? blogTopic
-    const researchOutputFileName = `./_output/knowledge/${topicToFilename(researchTopic)}_knowledge.json`
-    const outputFileName = options.output ?? `./_output/blogs/${topicToFilename(blogTopic)}_first_draft.md`
-    const writingFilePath = options.writingFilePath
-    const structureFilePath = options.structureFilePath
+
+    const author = options.author
+    const templateConfigPath = `_templates/${author.toLowerCase()}.json`;
+    let templateConfigExists = fs.existsSync(templateConfigPath);
+    let templateConfig;
+    if (templateConfigExists) {
+      templateConfig = JSON.parse(fs.readFileSync(templateConfigPath, 'utf8'));
+    }
+    const writingFilePath = templateConfig?.writingFilePath ?? options.writingFilePath
+    const structureFilePath = templateConfig?.structureFilePath ?? options.structureFilePath
     if (!blogTopic || !researchTopic || !writingFilePath || !structureFilePath) {
       console.log('blog and research topic are required');
       return;
     }
 
+    const researchOutputFileName = `./_output/knowledge/${topicToFilename(researchTopic)}_knowledge.json`
+    const outputFileName = options.output ?? `./_output/blogs/${topicToFilename(blogTopic)}_first_draft.md`
     const styleTemplate = fs.readFileSync(writingFilePath, 'utf8')
     const structureTemplate = fs.readFileSync(structureFilePath, 'utf8')
     if (!styleTemplate || !structureTemplate) {

@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "cli": "node src/index.js",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js "
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js ",
+    "firstDraft": "node src/index.js --cmd firstDraft"
   },
   "author": "",
   "license": "ISC",
